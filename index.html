@@ -173,6 +173,61 @@ const db = firebase.firestore();
 const storage = firebase.storage();
 
 function bookSession() {
+  try {
+
+    const mc = document.getElementById("mc").value;
+    const dc = document.getElementById("dc").value;
+    const mode = document.getElementById("mode").value;
+    const date = document.getElementById("date").value;
+    const time = document.getElementById("time").value;
+    const file = document.getElementById("screenshot").files[0];
+
+    if (!mc || !dc || !date || !time || !file) {
+      alert("Fill all fields + upload screenshot!");
+      return;
+    }
+
+    const uploadRef = storage.ref("payments/" + Date.now() + "_" + file.name);
+
+    uploadRef.put(file).then(snapshot => {
+      snapshot.ref.getDownloadURL().then(url => {
+
+        db.collection("bookings").add({
+          minecraft: mc,
+          discord: dc,
+          mode: mode,
+          date: date,
+          time: time,
+          screenshot: url,
+          createdAt: new Date()
+        });
+
+        // SHOW CONFIRM PAGE
+        document.getElementById("main").style.display = "none";
+        document.getElementById("confirm").style.display = "block";
+
+        document.getElementById("details").innerHTML =
+          "You will be coached on <b>" + date + "</b> at <b>" + time + "</b>";
+
+      }).catch(err => {
+        alert("Upload failed: " + err.message);
+      });
+
+    }).catch(err => {
+      alert("Firebase upload error: " + err.message);
+    });
+
+  } catch (e) {
+    alert("Something broke: " + e.message);
+  }
+}
+</script>
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const storage = firebase.storage();
+
+function bookSession() {
 
   const mc = document.getElementById("mc").value;
   const dc = document.getElementById("dc").value;
