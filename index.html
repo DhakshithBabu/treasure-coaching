@@ -1,77 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Treasure Coaching</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Treasure Coaching</title>
 
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial;
-      background: black;
-      color: white;
-      text-align: center;
-    }
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap');
 
-    h1 {
-      color: red;
-      font-size: 3rem;
-      margin-top: 30px;
-    }
+body {
+  margin: 0;
+  font-family: Orbitron, sans-serif;
+  background: radial-gradient(circle at top, #2b0000, #000);
+  color: white;
+}
 
-    .container {
-      max-width: 500px;
-      margin: auto;
-      padding: 20px;
-    }
+/* HERO */
+.hero {
+  text-align: center;
+  padding: 60px 20px;
+}
 
-    input, select {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border-radius: 10px;
-      border: none;
-    }
+h1 {
+  font-size: 4rem;
+  color: #ff2b2b;
+  text-shadow: 0 0 25px red;
+}
 
-    button {
-      width: 100%;
-      padding: 15px;
-      background: red;
-      border: none;
-      color: white;
-      font-size: 18px;
-      border-radius: 10px;
-      cursor: pointer;
-      margin-top: 10px;
-    }
+.tag {
+  color: #aaa;
+  margin-top: 10px;
+}
 
-    button:hover {
-      background: darkred;
-    }
+/* SECTION */
+.section {
+  max-width: 1000px;
+  margin: auto;
+  padding: 20px;
+}
 
-    .card {
-      border: 1px solid red;
-      padding: 20px;
-      border-radius: 15px;
-      margin-top: 20px;
-    }
-  </style>
+.card {
+  background: rgba(0,0,0,0.7);
+  border: 1px solid red;
+  padding: 20px;
+  border-radius: 15px;
+}
+
+/* FORM */
+input, select {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 10px;
+  border: none;
+  background: #111;
+  color: white;
+}
+
+button {
+  width: 100%;
+  padding: 15px;
+  background: red;
+  border: none;
+  color: white;
+  font-size: 18px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: darkred;
+}
+
+/* CONFIRM PAGE */
+.confirm {
+  display: none;
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.big {
+  font-size: 2.5rem;
+  color: #00ff88;
+}
+
+.small {
+  color: #aaa;
+}
+
+/* HIDE FORM AFTER BOOKING */
+.hide {
+  display: none;
+}
+</style>
 </head>
 
 <body>
 
-  <h1>Treasure Coaching</h1>
-  <p>Trying My Best To Make You Better</p>
+<!-- MAIN SITE -->
+<div id="main">
 
-  <div class="container">
+  <div class="hero">
+    <h1>Treasure Coaching</h1>
+    <div class="tag">Minecraft PvP Coaching • ₹29 per session</div>
+  </div>
 
+  <div class="section">
     <div class="card">
-      <h2>Book PvP Session (₹29)</h2>
+
+      <h2>Book Your Session</h2>
 
       <input id="mc" placeholder="Minecraft Username" />
       <input id="dc" placeholder="Discord Username" />
@@ -85,36 +127,69 @@
       <input id="date" type="date" />
       <input id="time" type="time" />
 
-      <button onclick="bookSession()">Book Session</button>
-    </div>
+      <p style="color:#aaa;">Upload Payment Screenshot (₹29 UPI)</p>
+      <input type="file" id="screenshot" accept="image/*" />
 
+      <button onclick="bookSession()">PAY & BOOK</button>
+
+      <p style="text-align:center;color:#aaa;margin-top:10px;">
+        UPI: dhakshith@fam
+      </p>
+
+    </div>
   </div>
 
-  <script>
-    // 🔥 Firebase Config (YOUR PROJECT)
-    const firebaseConfig = {
-      apiKey: "AIzaSyCnrO2F5hhiIBk-w921KeBsXC2cQV64SEk",
-      authDomain: "treasure-coaching.firebaseapp.com",
-      projectId: "treasure-coaching",
-      storageBucket: "treasure-coaching.appspot.com",
-      messagingSenderId: "391426890031",
-      appId: "1:391426890031:web:d8d1540fb56a836f7269da"
-    };
+</div>
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+<!-- CONFIRMATION PAGE -->
+<div id="confirm" class="confirm">
+  <div class="big">🔥 SLOT BOOKED SUCCESSFULLY</div>
 
-    function bookSession() {
-      const mc = document.getElementById("mc").value;
-      const dc = document.getElementById("dc").value;
-      const mode = document.getElementById("mode").value;
-      const date = document.getElementById("date").value;
-      const time = document.getElementById("time").value;
+  <p class="small">
+    Your coaching session is confirmed.
+  </p>
 
-      if (!mc || !dc || !date || !time) {
-        alert("Please fill all fields!");
-        return;
-      }
+  <p class="small" id="details"></p>
+
+  <br/>
+
+  <div class="small">
+    👉 Please contact <b>godtreasure.exe</b> on Discord exactly at your booked time.
+  </div>
+</div>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyCnrO2F5hhiIBk-w921KeBsXC2cQV64SEk",
+  authDomain: "treasure-coaching.firebaseapp.com",
+  projectId: "treasure-coaching",
+  storageBucket: "treasure-coaching.appspot.com",
+  messagingSenderId: "391426890031",
+  appId: "1:391426890031:web:d8d1540fb56a836f7269da"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const storage = firebase.storage();
+
+function bookSession() {
+
+  const mc = document.getElementById("mc").value;
+  const dc = document.getElementById("dc").value;
+  const mode = document.getElementById("mode").value;
+  const date = document.getElementById("date").value;
+  const time = document.getElementById("time").value;
+  const file = document.getElementById("screenshot").files[0];
+
+  if (!mc || !dc || !date || !time || !file) {
+    alert("Fill all fields + upload screenshot!");
+    return;
+  }
+
+  const uploadRef = storage.ref("payments/" + file.name);
+
+  uploadRef.put(file).then(snapshot => {
+    snapshot.ref.getDownloadURL().then(url => {
 
       db.collection("bookings").add({
         minecraft: mc,
@@ -122,12 +197,21 @@
         mode: mode,
         date: date,
         time: time,
+        screenshot: url,
         createdAt: new Date()
       });
 
-      alert("Booking Successful!");
-    }
-  </script>
+      // SHOW CONFIRMATION PAGE
+      document.getElementById("main").style.display = "none";
+      document.getElementById("confirm").style.display = "block";
+
+      document.getElementById("details").innerHTML =
+        "You will be coached on <b>" + date + "</b> at <b>" + time + "</b>";
+
+    });
+  });
+}
+</script>
 
 </body>
 </html>
